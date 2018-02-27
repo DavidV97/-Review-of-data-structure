@@ -1,4 +1,4 @@
-from BSTNode import BSTNode
+from TreeNode import TreeNode
 
 
 class BSTree:
@@ -11,9 +11,9 @@ class BSTree:
 
             if node is None:
                 return
-            yield node.value
-            yield from pre_order(node.left)
-            yield from pre_order(node.right)
+            yield node.data
+            yield from pre_order(node.left_node)
+            yield from pre_order(node.right_node)
         yield from pre_order(self._root)
 
     def in_order_traversal(self):
@@ -21,9 +21,9 @@ class BSTree:
 
             if node is None:
                 return
-            yield from in_order(node.left)
-            yield node.value
-            yield from in_order(node.right)
+            yield from in_order(node.left_node)
+            yield node.data
+            yield from in_order(node.right_node)
         yield from in_order(self._root)
 
     def post_order_traversal(self):
@@ -31,73 +31,78 @@ class BSTree:
 
             if node is None:
                 return
-            yield from post_order(node.left)
-            yield from post_order(node.right)
-            yield node.value
+            yield from post_order(node.left_node)
+            yield from post_order(node.right_node)
+            yield node.data
         yield from post_order(self._root)
 
     @property
     def size(self):
         return self._size
 
-    def contains(self, value):
-        def _contains(node, value):
+    def __contains__(self, data):
+        def _contains(node, data):
             return (
                 False if node is None else
-                _contains(node.left, value) if value < node.value else
-                _contains(node.right, value) if value > node.value else
+                _contains(node.left_node, data) if data < node.data else
+                _contains(node.right_node, data) if data > node.data else
                 True
             )
-        return _contains(self._root, value)
+        return _contains(self._root, data)
 
-    def insert(self, value):
-        def _insert(node, value):
+    def add(self, data):
+        def _insert(node, data):
 
             if node is None:
-                return BSTNode(value)
+                return TreeNode(data)
 
-            elif value == node.value:
+            elif data == node.data:
                 return None
 
-            elif value < node.value:
-                node.left = _insert(node.left, value)
+            elif data < node.data:
+                node.left_node = _insert(node.left_node, data)
 
-            elif value > node.value:
-                node.right = _insert(node.right, value)
+            elif data > node.data:
+                node.right_node = _insert(node.right_node, data)
             return node
 
-        self._root = _insert(self._root, value)
+        self._root = _insert(self._root, data)
 
         if self._root:
             self._size += 1
 
         return self._root is not None
 
-    def remove(self, value):
-        def _remove(node, value):
-            if node.value == value:
-                if not (node.left and node.right):
-                    return node.left or node.right, True
+    def delete(self, data):
+        def _remove(node, data):
+            if node.data == data:
+                if not (node.left_node and node.right_node):
+
+                    return node.left_node or node.right_node, True
 
                 else:
-                    successor, parent = node.right, node
+                    successor, parent = node.right_node, node
 
-                    while successor.left:
-                        successor, parent = successor.left, successor
+                    while successor.left_node:
 
-                    successor.left = node.left
+                        successor, parent = successor.left_node, successor
+
+                    successor.left_node = node.left_node
 
                     if parent != node:
-                        parent.left = successor.right
-                        successor.right = node.right
+                        parent.left_node = successor.right_node
+                        successor.right_node = node.right_node
+
                     return successor, True
 
-            elif value < node.value and node.left:
-                node.left, removed = _remove(node.left, value)
+            elif data < node.data and node.left_node:
+                node.left_node, removed = _remove(node.left_node, data)
+
                 return node, removed
 
-            elif value > node.value and node.right:
-                node.right, removed = _remove(node.right, value)
+            elif data > node.data and node.right_node:
+                node.right_node, removed = _remove(node.right_node, data)
+
                 return node, removed
 
             return node, False
@@ -105,7 +110,56 @@ class BSTree:
         if self._root is None:
             return False
 
-        self._root, removed = _remove(self._root, value)
+        self._root, removed = _remove(self._root, data)
         self._size -= int(removed)
 
         return removed
+
+    def isEmpty(self):
+        if self._root is None:
+            return True
+        else:
+            return False
+
+    def __str__(self):
+        s = "Arbol vacío"
+        count = 0
+
+        if self.size:
+            s = "Pre order: ["
+
+            for i in self.pre_order_traversal():
+                if count == 0:
+                    s += str(i)
+                else:
+                    s += ", " + str(i)
+
+                count += 1
+
+            s += "] \nIn order: ["
+            count = 0
+
+            for x in self.in_order_traversal():
+                if count == 0:
+                    s += str(x)
+                else:
+                    s += ", " + str(x)
+
+                count += 1
+
+            s += "] \nPost order: ["
+            count = 0
+
+            for y in self.post_order_traversal():
+                if count == 0:
+                    s += str(y)
+                else:
+                    s += ", " + str(y)
+
+                count += 1
+            s += "]"
+
+            return (s)
+
+        else:
+            return (s)

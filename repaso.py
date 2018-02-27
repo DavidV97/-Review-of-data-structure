@@ -12,46 +12,52 @@ def start():
 
 
 def menu():
+    print("____________Menu principal____________\n")
     print("1. Agregar datos en una estructura\n")
     print("2. Mover datos en una estructura\n")
     print("3. Eliminar datos en una estructura\n")
     print("4. Mostrar datos de una estructura\n")
     print("0. Salir\n")
+    print("______________________________________\n")
 
 
 def get_option():
 
-    option = input("Digite una opcion\n")
+    option = input("Digite una opcion: ")
 
     return option
 
 
 def execute_menu(option):
     exit = True
+    operation = ""
 
     if option == "1":
-
-        add_menu()
+        operation = "Add"
+        add_move_delete_show_menu(operation)
         option = get_option()
-        execute_add_menu(option)
+        execute_add_move_delete_show(option, operation)
 
     elif option == "2":
 
-        move_menu()
+        operation = "Move"
+        add_move_delete_show_menu(operation)
         option = get_option()
-        execute_move_menu(option)
+        execute_add_move_delete_show(option, operation)
 
     elif option == "3":
 
-        delete_menu()
+        operation = "Delete"
+        add_move_delete_show_menu(operation)
         option = get_option()
-        execute_delete_menu(option)
+        execute_add_move_delete_show(option, operation)
 
     elif option == "4":
 
-        show_menu()
+        operation = "Show"
+        add_move_delete_show_menu(operation)
         option = get_option()
-        execute_show_menu(option)
+        execute_add_move_delete_show(option, operation)
 
     elif option == "0":
 
@@ -59,211 +65,156 @@ def execute_menu(option):
         print("Gracias...")
 
     else:
-        print("Opcion invalida")
+        print("*Opcion invalida*")
 
     return exit
 
 
-def add_menu():
-    print("1. Agregar datos en una lista\n")
-    print("2. Agregar datos en una pila\n")
-    print("3. Agregar datos en una cola\n")
-    print("4. Agregar datos en un arbol\n")
+def add_move_delete_show_menu(operation):
+    operation = get_ES_name(operation)
+
+    print("____________" + operation + " datos____________\n")
+    print("1. En una lista\n")
+    print("2. En una pila\n")
+    print("3. En una cola\n")
+    print("4. En un arbol binario\n")
+    print("5. En un arbol AVL\n")
+    print("0. <-\n")
+    print("______________________________________")
 
 
-def execute_add_menu(option):
+def get_ES_name(operation):
+    if operation == "Add":
+        return "Agregar"
+    elif operation == "Move":
+        return "Mover"
+    elif operation == "Delete":
+        return "Eliminar"
+    else:
+        return "Mostrar"
+
+
+def execute_add_move_delete_show(option, operation):
+    strcuk_type = ""
+
+    if option == "1":
+        strcuk_type = "lista"
+        execute_operation(operation, strcuk_type)
+
+    elif option == "2":
+        strcuk_type = "pila"
+        execute_operation(operation, strcuk_type)
+
+    elif option == "3":
+        strcuk_type = "cola"
+        execute_operation(operation, strcuk_type)
+
+    elif option == "4":
+        strcuk_type = "arbol binario"
+        execute_operation(operation, strcuk_type)
+
+    elif option == "5":
+        strcuk_type = "arbol AVL"
+        execute_operation(operation, strcuk_type)
+
+    elif option == "0":
+        pass
+
+    else:
+        print("Opcion invalida")
+
+
+def execute_operation(operation, struck_type):
     num = 0
 
-    if option == "1":
-        num = get_input()
-        print(str(Manager.add_item_list(num)) + "\n")
+    if operation == "Add" or operation == "Delete" or operation == "Move":
 
-    elif option == "2":
-        num = get_input()
-        print(str(Manager.add_item_stack(num)) + "\n")
+        if operation == "Add":
 
-    elif option == "3":
-        num = get_input()
-        print(str(Manager.add_item_queue(num)) + "\n")
+            num = get_input()
+            print(str(Manager.add_item(num, struck_type)))
 
-    elif option == "4":
-        num = get_input()
-        print(str(Manager.add_item_BTree(num)) + "\n")
+        elif operation == "Move":
+            movement_op(struck_type)
+
+        else:
+            if struck_type == "lista" or struck_type == "arbol binario" or struck_type == "arbol AVL":
+                num = get_input()
+                print(str(Manager.delete_item(num, struck_type)))
+            else:
+                num = 0
+                print(str(Manager.delete_item(num, struck_type)))
     else:
-        print("Opcion invalida")
+        print(str(Manager.show_item(struck_type)))
 
 
-def move_menu():
-    print("1. Mover datos en una lista\n")
-    print("2. Mover datos en una pila\n")
-    print("3. Mover datos en una cola\n")
-    print("4. Mover datos en un arbol\n")
+def movement_op(struck_type):
+    movement_menu(struck_type)
+    option = get_option()
+    move_to(option, struck_type)
 
 
-def execute_move_menu(option):
+def movement_menu(struck_type):
+    print("______________________________________\n")
+    if struck_type == "lista":
+        print("2. Mover a una pila\n")
+        print("3. Mover a una cola\n")
+        print("4. Mover a un arbol\n")
+        print("5. Mover a un arbol AVL\n")
 
-    if option == "1":
-        move_from_list()
-
-    elif option == "2":
-        move_from_stack()
-
-    elif option == "3":
-        move_from_queue()
-
-    elif option == "4":
-        move_from_btree()
-
-    else:
-        print("Opcion invalida")
-
-
-def movement_menu(num):
-    if num == 1:
-        print("1. Mover a una pila\n")
-        print("2. Mover a una cola\n")
-        print("3. Mover a un arbol\n")
-    elif num == 2:
+    elif struck_type == "pila":
         print("1. Mover a una lista\n")
-        print("2. Mover a una cola\n")
-        print("3. Mover a un arbol\n")
-    elif num == 3:
+        print("3. Mover a una cola\n")
+        print("4. Mover a un arbol\n")
+        print("5. Mover a un arbol AVL\n")
+
+    elif struck_type == "cola":
         print("1. Mover a una lista\n")
         print("2. Mover a una pila\n")
-        print("3. Mover a un arbol\n")
-    else:
+        print("4. Mover a un arbol\n")
+        print("5. Mover a un arbol AVL\n")
+
+    elif struck_type == "arbol binario":
         print("1. Mover a una lista\n")
         print("2. Mover a una pila\n")
         print("3. Mover a una cola\n")
+        print("5. Mover a un arbol AVL\n")
+
+    elif struck_type == "arbol AVLvalue, ..., sep, end, file, flush":
+        print("1. Mover a una lista\n")
+        print("2. Mover a una pila\n")
+        print("3. Mover a una cola\n")
+        print("4. Mover a un arbol\n")
+    print("______________________________________")
 
 
-def move_from_list():
-    movement_menu(1)
-    option = get_option()
+def move_to(option, struck_type):
 
-    print(str(Manager.show_item_list()) + "\n")
+    print("\n" + str(Manager.show_item(struck_type)) + "\n")
+    print("Numeros a mover\n")
     num = get_input()
 
-    if(Manager.move_item_list(num) is True):
+    if(Manager.move_item(num, struck_type) is True):
 
         if(option == "1"):
-            print(str(Manager.add_item_stack(num)) + "\n")
+            strcuk_typ = "lista"
+            print(str(Manager.add_item(num, strcuk_typ)) + "\n")
         elif(option == "2"):
-            print(str(Manager.add_item_queue(num)) + "\n")
+            strcuk_typ = "pila"
+            print(str(Manager.add_item(num, strcuk_typ)) + "\n")
         elif(option == "3"):
-            print(str(Manager.add_item_BTree(num)) + "\n")
+            strcuk_typ = "cola"
+            print(str(Manager.add_item(num, strcuk_typ)) + "\n")
+        elif(option == "4"):
+            strcuk_typ = "arbol binario"
+            print(str(Manager.add_item(num, strcuk_typ)) + "\n")
+        elif(option == "5"):
+            strcuk_typ = "arbol AVL"
+            print(str(Manager.add_item(num, strcuk_typ)) + "\n")
         else:
             print("*** Opcion invalida ***")
     else:
-        print(str(Manager.move_item_list(num)) + "\n")
-
-
-def move_from_stack():
-    movement_menu(2)
-    option = get_option()
-
-    num = Manager.get_item_stack()
-
-    if(Manager.move_item_stack() is True):
-
-        if(option == "1"):
-            print(str(Manager.add_item_list(num)) + "\n")
-        elif(option == "2"):
-            print(str(Manager.add_item_queue(num)) + "\n")
-        elif(option == "3"):
-            print(str(Manager.add_item_BTree(num)) + "\n")
-        else:
-            print("*** Opcion invalida ***")
-    else:
-        print(str(Manager.move_item_list()) + "\n")
-
-
-def move_from_queue():
-    movement_menu(3)
-    option = get_option()
-
-    num = Manager.get_item_queue()
-
-    if(Manager.move_item_queue() is True):
-
-        if(option == "1"):
-            print(str(Manager.add_item_list(num)) + "\n")
-        elif(option == "2"):
-            print(str(Manager.add_item_stack(num)) + "\n")
-        elif(option == "3"):
-            print(str(Manager.add_item_BTree(num)) + "\n")
-        else:
-            print("*** Opcion invalida ***")
-    else:
-        print(str(Manager.move_item_list()) + "\n")
-
-
-def move_from_btree():
-    movement_menu(4)
-    option = get_option()
-
-    print(str(Manager.show_item_BTree()) + "\n")
-    num = get_input()
-
-    if(Manager.move_item_BTree(num) is True):
-
-        if(option == "1"):
-            print(str(Manager.add_item_list(num)) + "\n")
-        elif(option == "2"):
-            print(str(Manager.add_item_stack(num)) + "\n")
-        elif(option == "3"):
-            print(str(Manager.add_item_queue(num)) + "\n")
-        else:
-            print("*** Opcion invalida ***")
-    else:
-        print(str(Manager.move_item_BTree(num)) + "\n")
-
-
-def delete_menu():
-    print("1. Eliminar datos en una lista\n")
-    print("2. Eliminar datos en una pila\n")
-    print("3. Eliminar datos en una cola\n")
-    print("4. Eliminar datos en un arbol\n")
-
-
-def execute_delete_menu(option):
-
-    if option == "1":
-        num = get_input()
-        print(str(Manager.delete_item_list(num)) + "\n")
-
-    elif option == "2":
-        print(str(Manager.delete_item_stack()) + "\n")
-
-    elif option == "3":
-        print(str(Manager.delete_item_queue()) + "\n")
-
-    elif option == "4":
-        num = get_input()
-        print(str(Manager.delete_item_BTree(num)) + "\n")
-    else:
-        print("Opcion invalida")
-
-
-def show_menu():
-    print("1. Mostrar datos de la lista\n")
-    print("2. Mostrar datos de la pila\n")
-    print("3. Mostrar datos de la cola\n")
-    print("4. Mostrar datos del arbol\n")
-
-
-def execute_show_menu(option):
-
-    if option == "1":
-        print(str(Manager.show_item_list()) + "\n")
-    elif option == "2":
-        print(str(Manager.show_item_stack()) + "\n")
-    elif option == "3":
-        print(str(Manager.show_item_queue()) + "\n")
-    elif option == "4":
-        print(str(Manager.show_item_BTree()) + "\n")
-    else:
-        print("Opcion invalida")
+        print("*** Error al mover ***")
 
 
 def get_input():

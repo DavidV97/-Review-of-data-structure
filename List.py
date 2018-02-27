@@ -1,96 +1,49 @@
 from Node import Node
 from Merge_sort import Merge_sort
+from DataStructure import DataStructure
 
 
-class LinkedList:
-
-    def __init__(self):
-        self.head = None
-
-    def isEmpty(self):
-        return self.head is None
+class LinkedList(DataStructure):
 
     def add(self, item):
-        success = True
 
         try:
-            temp = Node(item)
-            temp.setNext(self.head)
-            self.head = temp
+            temp_node = Node(item)
+
+            temp_node.next_node = self.head
+
+            self.head = temp_node
 
             self.head = Merge_sort.mergeSort(self.head)
 
+            return True
+
         except ValueError:
-            success = False
+            return False
 
-        return success
-
-    def size(self):
-
-        current = self.head
-        count = 0
-
-        while current is not None:
-            count = count + 1
-            current = current.getNext()
-
-        return count
-
-    def search(self, item):
-
-        current = self.head
-        found = False
-
-        while current is not None and not found:
-
-            if current.getData() == item:
-                found = True
-
-            else:
-                current = current.getNext()
-
-        return found
-
-    def remove(self, item):
-        success = True
+    def delete(self, item):
 
         try:
-            current = self.head
-            previous = None
+            curr_node = self.head
+            prev_node = None
             found = False
 
             while not found:
 
-                if current.getData() == item:
+                if curr_node.data == item:
                     found = True
 
                 else:
-                    previous = current
-                    current = current.getNext()
+                    prev_node = curr_node
+                    curr_node = curr_node.next_node
 
-            if previous is None:
-                self.head = current.getNext()
+            if prev_node is None:
+                self.head = curr_node.next_node
 
             else:
-                previous.setNext(current.getNext())
+                prev_node.next_node = curr_node.next_node
+
+            return True
 
         except ValueError:
-            success = False
-
-        return success
-
-    def __str__(self):
-        s = "Lista vacía"
-        node = self.head
-
-        if node is not None:
-            s = "Lista = ["
-
-            while node.getNext() is not None:
-                s += str(node.getData()) + ", "
-                node = node.getNext()
-
-            s += str(node.getData())
-            s += "]"
-
-        return s
+            return False

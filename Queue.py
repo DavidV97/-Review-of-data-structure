@@ -1,87 +1,45 @@
 from Node import Node
+from DataStructure import DataStructure
 
 
-class Queue:
+class Queue(DataStructure):
 
     def __init__(self):
-        self.length = 0
-        self.head = None
+        super().__init__()
         self.tail = None
 
     def isEmpty(self):
-        if self.head is None and self.tail is None:
-            return True
-        else:
-            return False
+        return self.head and self.tail is None
 
-    def en_queue(self, item):
-        success = True
+    def add(self, item):
 
         try:
-            temp = Node(item)
+            temp_node = Node(item)
 
-            if self.length == 0:
-                self.head = self.tail = temp
+            if not len(self):
+                self.head = self.tail = temp_node
 
             else:
                 tail = self.tail
-                tail.setNext(temp)
-                self.tail = temp
+                self.tail = temp_node
+                tail.next_node = temp_node
 
-            self.length += 1
+            return True
 
         except ValueError:
-            success = False
+            return False
 
-        return success
-
-    def length(self):
-        return self.count()
-
-    def search(self, item):
-
-        current = self.head
-        found = False
-
-        while current is not None and not found:
-
-            if current.getData() == item:
-                found = True
-
-            else:
-                current = current.getNext()
-
-        return found
-
-    def de_queue(self):
-        success = True
+    def delete(self):
 
         try:
-            self.head = self.head.getNext()
+            self.head = self.head.next_node
 
-            if self.length == 0:
+            if len(self):
                 self.tail = None
+                return True
 
         except ValueError:
-            success = False
-
-        return success
+            return False
 
     def get_Data_de_queue(self):
-        return self.head.getData()
-
-    def __str__(self):
-        s = "Cola vacía"
-        node = self.head
-
-        if node is not None:
-            s = "Cola = ["
-
-            while node.getNext() is not None:
-                s += str(node.getData()) + ", "
-                node = node.getNext()
-
-            s += str(node.getData())
-            s += "]"
-
-        return s
+        return self.head.data

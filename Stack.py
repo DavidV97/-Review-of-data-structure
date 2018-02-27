@@ -1,78 +1,29 @@
 from Node import Node
+from DataStructure import DataStructure
 
 
-class Stack(object):
+class Stack(DataStructure):
 
-    def __init__(self):
-        self.head = None
-
-    def isEmpty(self):
-        return self.head is None
-
-    def push(self, item):
-        success = True
+    def add(self, item):
 
         try:
-            temp = Node(item)
-            temp.setNext(self.head)
-            self.head = temp
+            temp_node = Node(item)
+            temp_node.next_node = self.head
+            self.head = temp_node
+
+            return True
 
         except ValueError:
-            success = False
+            return False
 
-        return success
-
-    def size(self):
-        current = self.head
-        count = 0
-
-        while current is not None:
-            count = count + 1
-            current = current.getNext()
-
-        return count
-
-    def search(self, item):
-
-        current = self.head
-        found = False
-
-        while current is not None and not found:
-
-            if current.getData() == item:
-                found = True
-
-            else:
-                current = current.getNext()
-
-        return found
-
-    def pop(self):
-        success = True
+    def delete(self):
 
         try:
-            self.head = self.head.getNext()
+            self.head = self.head.next_node
+            return True
 
         except ValueError:
-            success = False
-
-        return success
+            return False
 
     def get_Data_Pop(self):
-        return self.head.getData()
-
-    def __str__(self):
-        s = "Pila vacía"
-        node = self.head
-
-        if node is not None:
-            s = "Pila = ["
-
-            while node.getNext() is not None:
-                s += str(node.getData()) + ", "
-                node = node.getNext()
-
-            s += str(node.getData())
-            s += "]"
-
-        return s
+        return self.head.data

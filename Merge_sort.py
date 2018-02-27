@@ -3,7 +3,7 @@ class Merge_sort:
     @classmethod
     def mergeSort(cls, head):
 
-        if head is None or head.nextNode is None:
+        if head is None or head.next_node is None:
             return head
 
         l1, l2 = cls.divideLists(head)
@@ -20,24 +20,24 @@ class Merge_sort:
         fast = head
 
         if fast:
-            fast = fast.nextNode
+            fast = fast.next_node
 
         while fast:
-            fast = fast.nextNode
+            fast = fast.next_node
 
             if fast:
-                fast = fast.nextNode
-                slow = slow.nextNode
+                fast = fast.next_node
+                slow = slow.next_node
 
-        mid = slow.nextNode
-        slow.nextNode = None
+        mid = slow.next_node
+        slow.next_node = None
 
         return head, mid
 
     @classmethod
     def mergeLists(cls, l1, l2):
 
-        temp = None
+        temp_node = None
 
         if l1 is None:
             return l2
@@ -46,11 +46,11 @@ class Merge_sort:
             return l1
 
         if l1.data <= l2.data:
-            temp = l1
-            temp.nextNode = cls.mergeLists(l1.nextNode, l2)
+            temp_node = l1
+            temp_node.next_node = cls.mergeLists(l1.next_node, l2)
 
         else:
-            temp = l2
-            temp.nextNode = cls.mergeLists(l1, l2.nextNode)
+            temp_node = l2
+            temp_node.next_node = cls.mergeLists(l1, l2.next_node)
 
-        return temp
+        return temp_node
